@@ -1,4 +1,10 @@
-/* 
-React codes for AllStudents page will go here
-path: frontend/src/pages/AllStudents.jsx
-*/
+function AllStudents() {
+  return (
+    <main style={{ padding: "2rem" }}>
+      <h1>All Students</h1>
+      <p>Student list will appear here.</p>
+    </main>
+  );
+}
+
+export default AllStudents;
