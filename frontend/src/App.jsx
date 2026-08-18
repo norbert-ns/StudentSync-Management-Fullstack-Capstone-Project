@@ -5,6 +5,7 @@ path: frontend/src/App.jsx
 
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import Home from './pages/Home.jsx';
 import './App.css';
 
 function App() {
@@ -12,7 +13,7 @@ function App() {
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <Navbar />
       <main style={{ flex: 1, padding: '2rem' }}>
-        {/* Main dashboard content will be added here by teammates */}
+        <Home />
       </main>
       <Footer />
     </div>
