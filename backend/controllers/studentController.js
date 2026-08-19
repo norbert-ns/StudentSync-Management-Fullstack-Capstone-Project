@@ -1,9 +1,10 @@
 const db = require('../config/db');
 
-// GET all students (Powers All Students Page table)
-const getAllStudents = async (req, res) => {
+// GET all students (Supports filtering by status and search by name/email)
+const getAllStudents = async (req, res, next) => {
+  const { status, search } = req.query;
   try {
-    const queryText = `
+    let queryText = `
       SELECT 
         id, 
         first_name, 
@@ -15,18 +16,37 @@ const getAllStudents = async (req, res) => {
         contact_number, 
         enrollment_date, 
         status
-      FROM students 
-      ORDER BY id ASC;
+      FROM students
     `;
-    const result = await db.query(queryText);
+    
+    const queryParams = [];
+    const conditions = [];
+
+    if (status) {
+      queryParams.push(status);
+      conditions.push(`status = $${queryParams.length}`);
+    }
+
+    if (search) {
+      queryParams.push(`%${search}%`);
+      conditions.push(`(first_name ILIKE $${queryParams.length} OR last_name ILIKE $${queryParams.length} OR email ILIKE $${queryParams.length})`);
+    }
+
+    if (conditions.length > 0) {
+      queryText += ` WHERE ` + conditions.join(' AND ');
+    }
+
+    queryText += ` ORDER BY id ASC;`;
+
+    const result = await db.query(queryText, queryParams);
     res.status(200).json(result.rows);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 };
 
-// GET single student by ID (Powers Student Details page/modal)
-const getStudentById = async (req, res) => {
+// GET single student by ID
+const getStudentById = async (req, res, next) => {
   const { id } = req.params;
   try {
     const result = await db.query('SELECT * FROM students WHERE id = $1', [id]);
@@ -35,13 +55,20 @@ const getStudentById = async (req, res) => {
     }
     res.status(200).json(result.rows[0]);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 };
 
-// POST create a new student (Powers "Add new student" modal form)
-const createStudent = async (req, res) => {
+// POST create a new student
+const createStudent = async (req, res, next) => {
   const { first_name, last_name, date_of_birth, student_id, email, contact_number, enrollment_date, status } = req.body;
+  
+  if (!first_name || !last_name || !email || !student_id) {
+    return res.status(400).json({ 
+      error: 'Validation failed: first_name, last_name, email, and student_id are required fields.' 
+    });
+  }
+
   try {
     const queryText = `
       INSERT INTO students (first_name, last_name, date_of_birth, student_id, email, contact_number, enrollment_date, status)
@@ -52,14 +79,21 @@ const createStudent = async (req, res) => {
     const result = await db.query(queryText, values);
     res.status(201).json(result.rows[0]);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 };
 
-// PUT update student details (Powers Edit/Update action in Student Details)
-const updateStudent = async (req, res) => {
+// PUT update student details
+const updateStudent = async (req, res, next) => {
   const { id } = req.params;
   const { first_name, last_name, date_of_birth, student_id, email, contact_number, enrollment_date, status } = req.body;
+  
+  if (!first_name || !last_name || !email || !student_id) {
+    return res.status(400).json({ 
+      error: 'Validation failed: first_name, last_name, email, and student_id are required fields.' 
+    });
+  }
+
   try {
     const queryText = `
       UPDATE students 
@@ -75,12 +109,12 @@ const updateStudent = async (req, res) => {
     }
     res.status(200).json(result.rows[0]);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 };
 
-// DELETE student (Powers trash icon deletion on All Students table)
-const deleteStudent = async (req, res) => {
+// DELETE student
+const deleteStudent = async (req, res, next) => {
   const { id } = req.params;
   try {
     const result = await db.query('DELETE FROM students WHERE id = $1 RETURNING *;', [id]);
@@ -89,7 +123,7 @@ const deleteStudent = async (req, res) => {
     }
     res.status(200).json({ message: 'Student deleted successfully', student: result.rows[0] });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 };
 
