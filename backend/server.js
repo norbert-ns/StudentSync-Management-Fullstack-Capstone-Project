@@ -3,23 +3,18 @@ const cors = require('cors');
 require('dotenv').config();
 
 const studentRoutes = require('./routes/studentRoutes');
-
+const landingRoutes = require('./routes/landingRoutes');
 
 const app = express();
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
 // Routes
 app.use('/api/students', studentRoutes);
+app.use('/api/landing', landingRoutes);
 
-// Health check endpoint
-app.get('/health', (req, res) => {
-  res.status(200).json({ status: 'OK', message: 'Server is running smoothly' });
-});
-
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
