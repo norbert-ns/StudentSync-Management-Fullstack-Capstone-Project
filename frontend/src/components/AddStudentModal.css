@@ -1,4 +1,174 @@
-/* 
-CSS styles for AddStudentModal page will go here
-Path: frontend/src/components/AddStudentModal.css
-*/
+.asm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 30, 15, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 24px;
+}
+
+.asm-modal {
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: var(--ss-white, #ffffff);
+  border-radius: 16px;
+  box-shadow: 0 20px 50px rgba(20, 40, 10, 0.25);
+  animation: asm-pop 160ms ease-out;
+}
+
+@keyframes asm-pop {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.asm-header {
+  background: var(--ss-green-100, #eef3dc);
+  border-radius: 16px 16px 0 0;
+  padding: 20px 24px 16px;
+  text-align: center;
+}
+
+.asm-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.asm-brand-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.asm-brand-name {
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: var(--ss-green-700, #355216);
+}
+
+.asm-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ss-green-700, #355216);
+}
+
+.asm-form {
+  padding: 20px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.asm-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.asm-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.asm-field-full {
+  width: 100%;
+}
+
+.asm-field label {
+  font-size: 12px;
+  color: var(--ss-gray-600, #6b7280);
+}
+
+.asm-field input {
+  border: 1px solid var(--ss-gray-300, #d8ddd0);
+  border-radius: 8px;
+  padding: 9px 12px;
+  font-size: 14px;
+  color: var(--ss-gray-800, #1f2a17);
+  background: var(--ss-white, #fff);
+  outline: none;
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
+.asm-field input:focus {
+  border-color: var(--ss-green-600, #6fa83b);
+  box-shadow: 0 0 0 3px var(--ss-green-focus, rgba(111, 168, 59, 0.18));
+}
+
+.asm-input-error {
+  border-color: var(--ss-red-500, #e14b4b) !important;
+}
+
+.asm-error-text {
+  font-size: 11px;
+  color: var(--ss-red-500, #e14b4b);
+}
+
+.asm-form-error {
+  background: var(--ss-red-50, #fdecec);
+  color: var(--ss-red-500, #e14b4b);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 13px;
+}
+
+.asm-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.asm-btn {
+  flex: 1;
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: opacity 120ms ease, background-color 120ms ease;
+}
+
+.asm-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.asm-btn-primary {
+  background: var(--ss-green-600, #6fa83b);
+  color: #ffffff;
+}
+
+.asm-btn-primary:hover:not(:disabled) {
+  background: var(--ss-green-700, #355216);
+}
+
+.asm-btn-secondary {
+  background: transparent;
+  color: var(--ss-green-700, #355216);
+  border-color: var(--ss-green-600, #6fa83b);
+}
+
+.asm-btn-secondary:hover:not(:disabled) {
+  background: var(--ss-green-50, #f7faf0);
+}
+
+@media (max-width: 480px) {
+  .asm-row {
+    grid-template-columns: 1fr;
+  }
+}
