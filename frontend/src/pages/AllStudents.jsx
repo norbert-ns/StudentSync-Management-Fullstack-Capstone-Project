@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import AddStudentModal from "../components/AddStudentModal";
 import { getStudents, addStudent, deleteStudent } from "../services/studentService";
 
@@ -8,6 +9,7 @@ import "./AllStudents.css";
 const PAGE_SIZE = 7;
 
 export default function AllStudents() {
+  const navigate = useNavigate();
   const [students, setStudents] = useState([]);
   const [total, setTotal] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
@@ -86,6 +88,11 @@ export default function AllStudents() {
       setDeletingId(null);
       setOpenMenuId(null);
     }
+  }
+
+  function handleViewDetails(id) {
+    setOpenMenuId(null);
+    navigate(`/students/${id}`);
   }
 
   function statusClass(status) {
@@ -188,7 +195,7 @@ export default function AllStudents() {
                           </button>
                           {openMenuId === student.id && (
                             <div className="menu-dropdown" role="menu">
-                              <button role="menuitem" onClick={() => setOpenMenuId(null)}>
+                              <button role="menuitem" onClick={() => handleViewDetails(student.id)}>
                                 View details
                               </button>
                               <button role="menuitem" onClick={() => setOpenMenuId(null)}>

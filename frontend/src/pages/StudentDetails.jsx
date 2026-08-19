@@ -1,18 +1,37 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { getStudentById } from "../services/studentService";
 import "./StudentDetails.css";
 
 function StudentDetails() {
+  const { id } = useParams();
+  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
+  const [student, setStudent] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
 
-  const [student, setStudent] = useState({
-    firstName: "Edison",
-    lastName: "SHEMA",
-    studentId: "KC 250248",
-    email: "edison.shema25eba25@keplrcollege.ac.rw",
-    dateOfBirth: "28 June 2005",
-    contactNumber: "+250 792942736",
-    enrollmentDate: "07 June 2025",
-  });
+  useEffect(() => {
+    let isCurrent = true;
+
+    async function loadStudent() {
+      setIsLoading(true);
+      setLoadError("");
+      try {
+        const result = await getStudentById(id);
+        if (isCurrent) setStudent(result);
+      } catch (error) {
+        if (isCurrent) setLoadError(error.message || "Couldn't load that student.");
+      } finally {
+        if (isCurrent) setIsLoading(false);
+      }
+    }
+
+    loadStudent();
+    return () => {
+      isCurrent = false;
+    };
+  }, [id]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -28,8 +47,25 @@ function StudentDetails() {
   };
 
   const handleGoBack = () => {
-    window.history.back();
+    navigate("/students");
   };
+
+  if (isLoading) {
+    return <div className="student-details-page">Loading student...</div>;
+  }
+
+  if (loadError || !student) {
+    return (
+      <div className="student-details-page">
+        <p>{loadError || "Student not found."}</p>
+        <button className="back-button" onClick={handleGoBack}>
+          Back to students
+        </button>
+      </div>
+    );
+  }
+
+  const fullName = `${student.firstName} ${student.lastName}`;
 
   return (
     <div className="student-details-page">
@@ -71,8 +107,8 @@ function StudentDetails() {
               </div>
 
               <div>
-                <h2>Edison SHEMA</h2>
-                <p>edison.shema25eba25@keplrcollege.ac.rw</p>
+                <h2>{fullName}</h2>
+                <p>{student.email}</p>
               </div>
 
             </div>
@@ -95,7 +131,7 @@ function StudentDetails() {
               <input
                 type="text"
                 name="firstName"
-                value={student.firstName}
+                value={student.firstName || ""}
                 onChange={handleChange}
                 disabled={!isEditing}
               />
@@ -107,7 +143,7 @@ function StudentDetails() {
               <input
                 type="text"
                 name="lastName"
-                value={student.lastName}
+                value={student.lastName || ""}
                 onChange={handleChange}
                 disabled={!isEditing}
               />
@@ -119,7 +155,7 @@ function StudentDetails() {
               <input
                 type="text"
                 name="studentId"
-                value={student.studentId}
+                value={student.studentId || ""}
                 onChange={handleChange}
                 disabled={!isEditing}
               />
@@ -131,7 +167,7 @@ function StudentDetails() {
               <input
                 type="email"
                 name="email"
-                value={student.email}
+                value={student.email || ""}
                 onChange={handleChange}
                 disabled={!isEditing}
               />
@@ -143,7 +179,7 @@ function StudentDetails() {
               <input
                 type="text"
                 name="dateOfBirth"
-                value={student.dateOfBirth}
+                value={student.dateOfBirth || ""}
                 onChange={handleChange}
                 disabled={!isEditing}
               />
@@ -155,7 +191,7 @@ function StudentDetails() {
               <input
                 type="text"
                 name="contactNumber"
-                value={student.contactNumber}
+                value={student.contactNumber || ""}
                 onChange={handleChange}
                 disabled={!isEditing}
               />
@@ -167,7 +203,7 @@ function StudentDetails() {
               <input
                 type="text"
                 name="enrollmentDate"
-                value={student.enrollmentDate}
+                value={student.enrollmentDate || ""}
                 onChange={handleChange}
                 disabled={!isEditing}
               />
