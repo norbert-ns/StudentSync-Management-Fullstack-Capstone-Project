@@ -1,3 +1,9 @@
+/* 
+React codes for AllStudents page will go here
+path: frontend/src/pages/Home.jsx
+*/
+
+// Hero/culture/gallery content. Please find it in src/pages/Home.jsx
 import { Link } from "react-router-dom";
 import "./Home.css";
 
