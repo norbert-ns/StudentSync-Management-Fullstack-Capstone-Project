@@ -59,20 +59,27 @@ const getStudentById = async (req, res, next) => {
   }
 };
 
-// POST create a new student
+// POST create a new student (Supports both camelCase and snake_case from frontend)
 const createStudent = async (req, res, next) => {
-  const { first_name, last_name, date_of_birth, student_id, email, contact_number, enrollment_date, status } = req.body;
+  const firstName = req.body.first_name || req.body.firstName;
+  const lastName = req.body.last_name || req.body.lastName;
+  const dateOfBirth = req.body.date_of_birth || req.body.dateOfBirth;
+  const studentId = req.body.student_id || req.body.studentId;
+  const email = req.body.email;
+  const contactNumber = req.body.contact_number || req.body.contactNumber;
+  const enrollmentDate = req.body.enrollment_date || req.body.enrollmentDate;
+  const status = req.body.status;
   
   // Required field validation
-  if (!first_name || !last_name || !email || !student_id) {
+  if (!firstName || !lastName || !email || !studentId) {
     return res.status(400).json({ 
       error: 'Validation failed: first_name, last_name, email, and student_id are required fields.' 
     });
   }
 
   // Date of birth validation: must be 2010 or earlier
-  if (date_of_birth) {
-    const birthYear = new Date(date_of_birth).getFullYear();
+  if (dateOfBirth) {
+    const birthYear = new Date(dateOfBirth).getFullYear();
     if (birthYear > 2010) {
       return res.status(400).json({ 
         error: 'Validation failed: Date of birth must be from 2010 or earlier.' 
@@ -86,7 +93,7 @@ const createStudent = async (req, res, next) => {
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
       RETURNING *;
     `;
-    const values = [first_name, last_name, date_of_birth, student_id, email, contact_number, enrollment_date || new Date(), status || 'Enrolled'];
+    const values = [firstName, lastName, dateOfBirth, studentId, email, contactNumber, enrollmentDate || new Date(), status || 'Enrolled'];
     const result = await db.query(queryText, values);
     res.status(201).json(result.rows[0]);
   } catch (error) {
@@ -94,21 +101,28 @@ const createStudent = async (req, res, next) => {
   }
 };
 
-// PUT update student details
+// PUT update student details (Supports both camelCase and snake_case from frontend)
 const updateStudent = async (req, res, next) => {
   const { id } = req.params;
-  const { first_name, last_name, date_of_birth, student_id, email, contact_number, enrollment_date, status } = req.body;
+  const firstName = req.body.first_name || req.body.firstName;
+  const lastName = req.body.last_name || req.body.lastName;
+  const dateOfBirth = req.body.date_of_birth || req.body.dateOfBirth;
+  const studentId = req.body.student_id || req.body.studentId;
+  const email = req.body.email;
+  const contactNumber = req.body.contact_number || req.body.contactNumber;
+  const enrollmentDate = req.body.enrollment_date || req.body.enrollmentDate;
+  const status = req.body.status;
   
   // Required field validation
-  if (!first_name || !last_name || !email || !student_id) {
+  if (!firstName || !lastName || !email || !studentId) {
     return res.status(400).json({ 
       error: 'Validation failed: first_name, last_name, email, and student_id are required fields.' 
     });
   }
 
   // Date of birth validation: must be 2010 or earlier
-  if (date_of_birth) {
-    const birthYear = new Date(date_of_birth).getFullYear();
+  if (dateOfBirth) {
+    const birthYear = new Date(dateOfBirth).getFullYear();
     if (birthYear > 2010) {
       return res.status(400).json({ 
         error: 'Validation failed: Date of birth must be from 2010 or earlier.' 
@@ -123,7 +137,7 @@ const updateStudent = async (req, res, next) => {
       WHERE id = $9
       RETURNING *;
     `;
-    const values = [first_name, last_name, date_of_birth, student_id, email, contact_number, enrollment_date, status, id];
+    const values = [firstName, lastName, dateOfBirth, studentId, email, contactNumber, enrollmentDate, status, id];
     const result = await db.query(queryText, values);
     
     if (result.rows.length === 0) {
