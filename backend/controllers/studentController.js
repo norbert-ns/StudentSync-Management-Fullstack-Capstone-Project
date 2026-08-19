@@ -63,10 +63,21 @@ const getStudentById = async (req, res, next) => {
 const createStudent = async (req, res, next) => {
   const { first_name, last_name, date_of_birth, student_id, email, contact_number, enrollment_date, status } = req.body;
   
+  // Required field validation
   if (!first_name || !last_name || !email || !student_id) {
     return res.status(400).json({ 
       error: 'Validation failed: first_name, last_name, email, and student_id are required fields.' 
     });
+  }
+
+  // Date of birth validation: must be 2010 or earlier
+  if (date_of_birth) {
+    const birthYear = new Date(date_of_birth).getFullYear();
+    if (birthYear > 2010) {
+      return res.status(400).json({ 
+        error: 'Validation failed: Date of birth must be from 2010 or earlier.' 
+      });
+    }
   }
 
   try {
@@ -88,10 +99,21 @@ const updateStudent = async (req, res, next) => {
   const { id } = req.params;
   const { first_name, last_name, date_of_birth, student_id, email, contact_number, enrollment_date, status } = req.body;
   
+  // Required field validation
   if (!first_name || !last_name || !email || !student_id) {
     return res.status(400).json({ 
       error: 'Validation failed: first_name, last_name, email, and student_id are required fields.' 
     });
+  }
+
+  // Date of birth validation: must be 2010 or earlier
+  if (date_of_birth) {
+    const birthYear = new Date(date_of_birth).getFullYear();
+    if (birthYear > 2010) {
+      return res.status(400).json({ 
+        error: 'Validation failed: Date of birth must be from 2010 or earlier.' 
+      });
+    }
   }
 
   try {
