@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './Navbar.css';
 import logo from '../assets/logo.png.webp';
 
@@ -6,18 +7,20 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="navbar-logo">
-        <img src={logo} alt="STUDENTSYNC Logo" className="logo-img" />
-        <span className="logo-text">STUDENTSYNC</span>
+        <Link to="/">
+          <img src={logo} alt="STUDENTSYNC Logo" className="logo-img" />
+          <span className="logo-text">STUDENTSYNC</span>
+        </Link>
       </div>
       <ul className="navbar-links">
         <li>
-          <a href="#home" className="nav-link green-text">Home</a>
+          <Link to="/" className="nav-link active">Home</Link>
         </li>
         <li>
-          <a href="#add-student" className="nav-link">Add Student</a>
+          <button className="nav-link btn-text">Add Student</button>
         </li>
         <li>
-          <a href="#all-students" className="nav-link active">All Students</a>
+          <Link to="/students" className="btn-outline">All Students</Link>
         </li>
       </ul>
     </nav>
