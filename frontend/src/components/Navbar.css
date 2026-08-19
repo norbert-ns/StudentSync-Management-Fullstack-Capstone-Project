@@ -1,65 +1,73 @@
-/* 
-CSS styles for AddStudentModal page will go here
-Path: frontend/src/components/Navbar.css 
-*/
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 4rem;
+  padding: 1rem 2rem;
   background-color: #ffffff;
-  border-bottom: 1px solid #e5e7eb;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.navbar-logo {
+.navbar-logo a {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 12px;
+  text-decoration: none;
 }
 
+/* Fixes the giant image overlap */
 .logo-img {
-  height: 38px;
+  height: 40px;
   width: auto;
   object-fit: contain;
 }
 
 .logo-text {
-  font-weight: 800;
-  font-size: 1.25rem;
-  color: #0b4f2c;
-  letter-spacing: 0.5px;
+  font-weight: 700;
+  color: #333333;
+  font-size: 1.1rem;
 }
 
 .navbar-links {
   display: flex;
+  align-items: center;
+  gap: 2rem;
   list-style: none;
-  gap: 1.5rem;
   margin: 0;
   padding: 0;
 }
 
 .nav-link {
   text-decoration: none;
-  color: #4b5563;
+  color: #555555;
   font-weight: 500;
-  font-size: 0.95rem;
-  padding: 0.4rem 0.8rem;
-  border-radius: 6px;
-  transition: all 0.2s ease-in-out;
 }
 
-.nav-link:hover {
-  color: #70b000;
-}
-
-/* Green text only (for Home) */
-.nav-link.green-text {
-  color: #70b000;
+.navbar-links .active {
+  color: #8cc63f;
   font-weight: 600;
 }
 
-/* Green text with border box (for All Students active button) */
-.nav-link.active {
-  color: #70b000;
-  border: 1px solid #70b000;
+.btn-text {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  color: #555555;
+}
+
+.btn-outline {
+  border: 2px solid #8cc63f;
+  color: #8cc63f;
+  padding: 8px 18px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.btn-outline:hover {
+  background-color: #8cc63f;
+  color: #ffffff;
 }
