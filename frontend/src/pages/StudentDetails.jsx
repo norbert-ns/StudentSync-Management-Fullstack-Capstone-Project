@@ -5,7 +5,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getStudentById } from "../services/studentService";
 import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Footer.jsx";
+import defaultAvatar from "../assets/default-profile.png";
 import "./StudentDetails.css";
+
+
+
 
 function StudentDetails() {
   const { id } = useParams();
@@ -118,7 +122,7 @@ function StudentDetails() {
 
                 <div className="profile-image">
                   <img
-                    src="https://i.pravatar.cc/150?img=47"
+                    src={defaultAvatar}
                     alt="Student profile"
                   />
                 </div>
