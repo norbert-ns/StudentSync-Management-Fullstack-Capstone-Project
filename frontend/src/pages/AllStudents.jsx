@@ -1,9 +1,12 @@
+/*All students JSX*/
+
 import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import AddStudentModal from "../components/AddStudentModal";
 import { getStudents, addStudent, deleteStudent } from "../services/studentService";
 
 import defaultAvatar from "../assets/default-profile.png";
+import deleteIcon from "../assets/delete-icon.png";
 import "./AllStudents.css";
 
 const PAGE_SIZE = 7;
@@ -22,36 +25,32 @@ export default function AllStudents() {
   const [deletingId, setDeletingId] = useState(null);
   const [loadError, setLoadError] = useState("");
 
-  const loadStudents = useCallback(async (opts = {}) => {
+  const fetchStudents = useCallback(async () => {
     setIsLoading(true);
     setLoadError("");
     try {
-      const result = await getStudents({
-        search: opts.search ?? search,
-        page: opts.page ?? page,
-        pageSize: PAGE_SIZE,
-      });
+      const result = await getStudents({ search, page, pageSize: PAGE_SIZE });
       setStudents(result.students);
       setTotal(result.total);
       setTotalPages(result.totalPages);
-      setPage(result.page);
     } catch (err) {
       setLoadError(err.message || "Couldn't load students. Is the backend server running?");
     } finally {
       setIsLoading(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [search, page]);
 
-  // Initial load
   useEffect(() => {
-    loadStudents({ page: 1 });
-  }, [loadStudents]);
+    fetchStudents();
+  }, [fetchStudents]);
 
-  // Debounced search - reset to page 1 whenever the query changes
   useEffect(() => {
     const timer = setTimeout(() => {
-      loadStudents({ search, page: 1 });
+      if (page !== 1) {
+        setPage(1);
+      } else {
+        fetchStudents();
+      }
     }, 300);
     return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -59,7 +58,7 @@ export default function AllStudents() {
 
   function goToPage(nextPage) {
     if (nextPage < 1 || nextPage > totalPages || nextPage === page) return;
-    loadStudents({ page: nextPage });
+    setPage(nextPage);
   }
 
   async function handleAddStudent(formData) {
@@ -67,13 +66,15 @@ export default function AllStudents() {
     try {
       await addStudent(formData);
       setIsModalOpen(false);
-      await loadStudents({ page: 1 });
+      if (page !== 1) setPage(1);
+      else fetchStudents();
     } finally {
       setIsSubmitting(false);
     }
   }
 
-  async function handleDelete(id, label) {
+  async function handleDelete(id, label, e) {
+    e.stopPropagation();
     const confirmed = window.confirm(`Remove ${label} from the list?`);
     if (!confirmed) return;
 
@@ -81,7 +82,8 @@ export default function AllStudents() {
     try {
       await deleteStudent(id);
       const isLastRowOnPage = students.length === 1 && page > 1;
-      await loadStudents({ page: isLastRowOnPage ? page - 1 : page });
+      if (isLastRowOnPage) setPage(page - 1);
+      else fetchStudents();
     } catch (err) {
       setLoadError(err.message || "Couldn't delete that student.");
     } finally {
@@ -90,7 +92,13 @@ export default function AllStudents() {
     }
   }
 
-  function handleViewDetails(id) {
+  function handleRowClick(id) {
+    setOpenMenuId(null);
+    navigate(`/students/${id}`);
+  }
+
+  function handleViewDetails(id, e) {
+    e.stopPropagation();
     setOpenMenuId(null);
     navigate(`/students/${id}`);
   }
@@ -108,7 +116,7 @@ export default function AllStudents() {
     }
   }
 
-  const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
+  const pageNumbers = Array.from({ length: Math.max(totalPages, 1) }, (_, i) => i + 1);
 
   return (
     <div className="all-students-page">
@@ -117,7 +125,7 @@ export default function AllStudents() {
         <div className="all-students-actions">
           <div className="search-box">
             <span className="search-icon" aria-hidden="true">
-              🔍
+              
             </span>
             <input
               type="text"
@@ -163,7 +171,11 @@ export default function AllStudents() {
               students.map((student) => {
                 const fullName = `${student.firstName} ${student.lastName}`;
                 return (
-                  <tr key={student.id}>
+                  <tr
+                    key={student.id}
+                    className="student-row"
+                    onClick={() => handleRowClick(student.id)}
+                  >
                     <td>
                       <div className="user-cell">
                         <img
@@ -187,18 +199,28 @@ export default function AllStudents() {
                           <button
                             className="icon-btn menu-trigger"
                             aria-label="More actions"
-                            onClick={() =>
-                              setOpenMenuId(openMenuId === student.id ? null : student.id)
-                            }
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setOpenMenuId(openMenuId === student.id ? null : student.id);
+                            }}
                           >
                             •••
                           </button>
                           {openMenuId === student.id && (
                             <div className="menu-dropdown" role="menu">
-                              <button role="menuitem" onClick={() => handleViewDetails(student.id)}>
+                              <button
+                                role="menuitem"
+                                onClick={(e) => handleViewDetails(student.id, e)}
+                              >
                                 View details
                               </button>
-                              <button role="menuitem" onClick={() => setOpenMenuId(null)}>
+                              <button
+                                role="menuitem"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setOpenMenuId(null);
+                                }}
+                              >
                                 Edit
                               </button>
                             </div>
@@ -207,10 +229,14 @@ export default function AllStudents() {
                         <button
                           className="icon-btn delete-btn"
                           aria-label={`Delete ${fullName}`}
-                          onClick={() => handleDelete(student.id, fullName)}
+                          onClick={(e) => handleDelete(student.id, fullName, e)}
                           disabled={deletingId === student.id}
                         >
-                          {deletingId === student.id ? "…" : "🗑"}
+                          {deletingId === student.id ? (
+                            "…"
+                          ) : (
+                            <img src={deleteIcon} alt="Delete" className="delete-icon-img" />
+                          )}
                         </button>
                       </div>
                     </td>
@@ -222,19 +248,17 @@ export default function AllStudents() {
         </table>
       </div>
 
-      {totalPages > 1 && (
-        <div className="pagination">
-          {pageNumbers.map((n) => (
-            <button
-              key={n}
-              className={n === page ? "page-btn page-btn-active" : "page-btn"}
-              onClick={() => goToPage(n)}
-            >
-              {n}
-            </button>
-          ))}
-        </div>
-      )}
+      <div className="pagination">
+        {pageNumbers.map((n) => (
+          <button
+            key={n}
+            className={n === page ? "page-btn page-btn-active" : "page-btn"}
+            onClick={() => goToPage(n)}
+          >
+            {n}
+          </button>
+        ))}
+      </div>
 
       <AddStudentModal
         isOpen={isModalOpen}
