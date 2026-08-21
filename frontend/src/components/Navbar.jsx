@@ -1,7 +1,7 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import './Navbar.css';
-import logo from '../assets/logo.png.webp';
+import React from "react";
+import { Link } from "react-router-dom";
+import "./Navbar.css";
+import logo from "../assets/logo.png.webp";
 
 const Navbar = () => {
   return (
@@ -14,13 +14,19 @@ const Navbar = () => {
       </div>
       <ul className="navbar-links">
         <li>
-          <Link to="/" className="nav-link active">Home</Link>
+          <Link to="/" className="nav-link active">
+            Home
+          </Link>
         </li>
         <li>
-          <button className="nav-link btn-text">Add Student</button>
+          <Link to="/students?add=1" className="nav-link btn-text">
+            Add Student
+          </Link>
         </li>
         <li>
-          <Link to="/students" className="btn-outline">All Students</Link>
+          <Link to="/students" className="btn-outline">
+            All Students
+          </Link>
         </li>
       </ul>
     </nav>

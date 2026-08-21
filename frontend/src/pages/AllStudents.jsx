@@ -1,9 +1,13 @@
 /*All students JSX*/
 
 import { useEffect, useState, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import AddStudentModal from "../components/AddStudentModal";
-import { getStudents, addStudent, deleteStudent } from "../services/studentService";
+import {
+  getStudents,
+  addStudent,
+  deleteStudent,
+} from "../services/studentService";
 
 import defaultAvatar from "../assets/default-profile.png";
 import deleteIcon from "../assets/delete-icon.png";
@@ -13,6 +17,8 @@ const PAGE_SIZE = 7;
 
 export default function AllStudents() {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const [students, setStudents] = useState([]);
   const [total, setTotal] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
@@ -25,6 +31,14 @@ export default function AllStudents() {
   const [deletingId, setDeletingId] = useState(null);
   const [loadError, setLoadError] = useState("");
 
+  useEffect(() => {
+    if (searchParams.get("add") === "1") {
+      setIsModalOpen(true);
+      searchParams.delete("add");
+      setSearchParams(searchParams, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
+
   const fetchStudents = useCallback(async () => {
     setIsLoading(true);
     setLoadError("");
@@ -34,7 +48,9 @@ export default function AllStudents() {
       setTotal(result.total);
       setTotalPages(result.totalPages);
     } catch (err) {
-      setLoadError(err.message || "Couldn't load students. Is the backend server running?");
+      setLoadError(
+        err.message || "Couldn't load students. Is the backend server running?",
+      );
     } finally {
       setIsLoading(false);
     }
@@ -116,7 +132,10 @@ export default function AllStudents() {
     }
   }
 
-  const pageNumbers = Array.from({ length: Math.max(totalPages, 1) }, (_, i) => i + 1);
+  const pageNumbers = Array.from(
+    { length: Math.max(totalPages, 1) },
+    (_, i) => i + 1,
+  );
 
   return (
     <div className="all-students-page">
@@ -124,9 +143,7 @@ export default function AllStudents() {
         <h1 className="all-students-title">All students</h1>
         <div className="all-students-actions">
           <div className="search-box">
-            <span className="search-icon" aria-hidden="true">
-              
-            </span>
+            <span className="search-icon" aria-hidden="true"></span>
             <input
               type="text"
               placeholder="Search"
@@ -135,7 +152,10 @@ export default function AllStudents() {
               aria-label="Search students by name or student ID"
             />
           </div>
-          <button className="add-student-btn" onClick={() => setIsModalOpen(true)}>
+          <button
+            className="add-student-btn"
+            onClick={() => setIsModalOpen(true)}
+          >
             + Add student
           </button>
         </div>
@@ -164,7 +184,9 @@ export default function AllStudents() {
             ) : students.length === 0 ? (
               <tr>
                 <td colSpan={5} className="table-message">
-                  {search ? `No students match "${search}".` : "No students yet."}
+                  {search
+                    ? `No students match "${search}".`
+                    : "No students yet."}
                 </td>
               </tr>
             ) : (
@@ -189,14 +211,18 @@ export default function AllStudents() {
                       </div>
                     </td>
                     <td>{student.studentId}</td>
-                    <td>{student.enrollmentDateDisplay || student.enrollmentDate}</td>
                     <td>
-                      <span className={statusClass(student.status)}>{student.status}</span>
+                      {student.enrollmentDateDisplay || student.enrollmentDate}
+                    </td>
+                    <td>
+                      <span className={statusClass(student.status)}>
+                        {student.status}
+                      </span>
                     </td>
                     <td className="action-col">
                       <div className="action-cell">
                         <div className="menu-wrapper">
-                          <button
+                          {/* <button
                             className="icon-btn menu-trigger"
                             aria-label="More actions"
                             onClick={(e) => {
@@ -205,12 +231,14 @@ export default function AllStudents() {
                             }}
                           >
                             •••
-                          </button>
+                          </button> */}
                           {openMenuId === student.id && (
                             <div className="menu-dropdown" role="menu">
                               <button
                                 role="menuitem"
-                                onClick={(e) => handleViewDetails(student.id, e)}
+                                onClick={(e) =>
+                                  handleViewDetails(student.id, e)
+                                }
                               >
                                 View details
                               </button>
@@ -235,7 +263,11 @@ export default function AllStudents() {
                           {deletingId === student.id ? (
                             "…"
                           ) : (
-                            <img src={deleteIcon} alt="Delete" className="delete-icon-img" />
+                            <img
+                              src={deleteIcon}
+                              alt="Delete"
+                              className="delete-icon-img"
+                            />
                           )}
                         </button>
                       </div>

@@ -28,8 +28,8 @@ html, body {
 
 /* 
    Body defines the outer paper margins:
-   - Top & Bottom = 40px
-   - Left & Right = 8% (Wide margins without triggering horizontal scroll)
+   - Top & Bottom = 20px
+   - Left & Right = 3% (Wide margins without triggering horizontal scroll)
 */
 body {
   display: flex;

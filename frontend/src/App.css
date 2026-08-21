@@ -13,7 +13,8 @@ html {
 }
 
 body {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Google Sans", Roboto, Arial, sans-serif;
+  font-style: normal;
   color: #064b35;
   background-color: white;
 }
@@ -23,7 +24,7 @@ a {
 }
 
 .container {
-  width: 85%;
+  width: 90%;
   max-width: 1120px;
   margin: 0 auto;
 }
