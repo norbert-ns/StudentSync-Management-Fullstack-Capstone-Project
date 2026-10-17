@@ -1,0 +1,144 @@
+/* 
+CSS styles for Footer Section will go here
+Path: frontend/src/components/Footer.css
+*/
+
+.footer {
+  width: 100%;
+  background-color: #F9FCFE;
+  border-top: none;
+  padding: 3rem 0 1.5rem 0;
+  margin-top: auto;
+  font-family: inherit;
+  color: #333333;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 3rem;
+  flex-wrap: wrap;
+}
+
+.footer-left {
+  flex: 1.5;
+  min-width: 320px;
+}
+
+.footer-brand {
+  margin-bottom: 2rem;
+}
+
+.brand-title {
+
+  font-family: 'Poppins', sans-serif;
+  font-weight: 800; /* ExtraBold */
+  font-size: 12px;
+  line-height: auto;
+  letter-spacing: 0%;
+  color: #004B2F;
+  text-align: left;
+  width: 520px;
+  height: 36px;
+}
+
+
+.brand-subtitle {
+  color: #70b000;
+  font-size: 0.95rem;
+  margin: 0;
+  font-weight: 500;
+}
+
+.section-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 1rem 0;
+}
+
+.footer-address {
+  margin-top: 1.5rem;
+}
+
+.info-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+  color: #4b5563;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.info-row a {
+  color: #4b5563;
+  text-decoration: none;
+}
+
+.info-row a:hover {
+  color: #70b000;
+}
+
+.info-icon {
+  stroke: #4b5563;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.footer-right {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  min-width: 300px;
+}
+
+.footer-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.social-links {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.social-links a {
+  color: #1a1a1a;
+  transition: color 0.2s ease-in-out;
+}
+
+.social-links a:hover {
+  color: #70b000;
+}
+
+.footer-bottom {
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #eeeeee;
+  text-align: center;
+}
+
+.footer-bottom p {
+  color: #6b7280;
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+/* Responsive collapse for small screens */
+@media (max-width: 768px) {
+  .footer-container {
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  .footer-right {
+    flex-direction: column;
+    gap: 2rem;
+  }
+}

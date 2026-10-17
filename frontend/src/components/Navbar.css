@@ -1,0 +1,73 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.navbar-logo a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+/* Fixes the giant image overlap */
+.logo-img {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+}
+
+.logo-text {
+  font-weight: 700;
+  color: #333333;
+  font-size: 1.1rem;
+}
+
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #555555;
+  font-weight: 500;
+}
+
+.navbar-links .active {
+  color: #8cc63f;
+  font-weight: 600;
+}
+
+.btn-text {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  color: #555555;
+}
+
+.btn-outline {
+  border: 2px solid #8cc63f;
+  color: #8cc63f;
+  padding: 8px 18px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.btn-outline:hover {
+  background-color: #8cc63f;
+  color: #ffffff;
+}
